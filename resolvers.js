@@ -10,6 +10,16 @@ exports.resolvers = {
     getAllRecipes: async (root, args, ctx) => {
       const allRecipe = await ctx.Recipe.find({});
       return allRecipe;
+    },
+    getCurrentUser: async (root, args, { currentUser, User }) => {
+      console.log("backend user", currentUser);
+      if (!currentUser) {
+        return null;
+      }
+      const user = await User.findOne({
+        username: currentUser.username
+      }).populate({ path: "favorites", model: "Recipe" });
+      return user;
     }
   },
   Mutation: {

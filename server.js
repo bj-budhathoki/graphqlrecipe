@@ -36,9 +36,8 @@ app.use(async (req, res, next) => {
     try {
       const currentUser = await jwt.verify(token, process.env.SECRET);
       req.currentUser = currentUser;
-      console.log(currentUser);
     } catch (error) {
-      console.log(errror);
+      console.log(error);
     }
   }
   next();
@@ -47,7 +46,11 @@ app.use(async (req, res, next) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ currentUser }) => ({ Recipe, User, currentUser }),
+  context: ({ req }) => ({
+    Recipe,
+    User,
+    currentUser: req.currentUser
+  }),
   playground: {
     endpoint: `http://localhost:4000/graphql`,
     settings: {
