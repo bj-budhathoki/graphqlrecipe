@@ -11,6 +11,10 @@ exports.resolvers = {
       const allRecipe = await ctx.Recipe.find({});
       return allRecipe;
     },
+    getRecipe:async(root,{_id},{Recipe})=>{
+      const recipe=await Recipe.findOne({_id});
+      return recipe
+    },
     getCurrentUser: async (root, args, { currentUser, User }) => {
       console.log("backend user", currentUser);
       if (!currentUser) {
