@@ -8,12 +8,22 @@ const createToken = (user, secret, expiresIn) => {
 exports.resolvers = {
   Query: {
     getAllRecipes: async (root, args, ctx) => {
-      const allRecipe = await ctx.Recipe.find({});
+      const allRecipe = await ctx.Recipe.find({}).sort({ createDate: "desc" });
       return allRecipe;
     },
-    getRecipe:async(root,{_id},{Recipe})=>{
-      const recipe=await Recipe.findOne({_id});
-      return recipe
+    getRecipe: async (root, { _id }, { Recipe }) => {
+      const recipe = await Recipe.findOne({ _id });
+      return recipe;
+    },
+    searchRecipes: async (root, { searchTerm }, { Recipe }) => {
+      if (searchTerm) {
+      } else {
+        const result = await Recipe.find().sort({
+          likes: "desc",
+          createDate: "desc"
+        });
+        return result;
+      }
     },
     getCurrentUser: async (root, args, { currentUser, User }) => {
       console.log("backend user", currentUser);
